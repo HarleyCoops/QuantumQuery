@@ -12,6 +12,9 @@ import torch.nn as nn
 from torch.nn import functional as F
 import argparse
 
+# Set the device
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Using device: {device}")
 
 # --- BEGIN model.py ---
 class LayerNorm(nn.Module):

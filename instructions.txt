@@ -1,0 +1,9 @@
+1. First we are going to examine each element and document the work flow and each function.In this initial overview we want to be ablt to identify where we can input our own model variables and API keys. 
+2. We want to add the apis and keys in this instruction file. We also want to inform the ai.scientist project that these tools for browsing the web, creating latex files, or recursively self training are available. We also want to install and run aider the ai pair programmer for this project as well. instlal that at this step. 
+3. Now we turn our attention back to the ai.scientist where we want to add mermaid ink and json crack to examine data as it is being generated. We will also add connections to the overleaf API which we have access to. We want to push all code to this repohttps://github.com/HarleyCoops/AI-Scientist and we want to delete and remove any connection to the original repo: https://github.com/SakanaAI/AI-Scientist
+
+4. From this starting point we want to ahve a number of things: a markdown file generated that summarizes the workflow of ai scientist, appending to the existing readme, that uses mermaid ink to document workflow of the scientist. 
+
+5. we want to have a working installation of the AI scientist at this point so confirm we have that before continuing. 
+
+6. Now that we are installed we are going to create a paper documenting the fine tuning of an AI model on a single persons handwriting - in this case Sir James Hector- using original samples, the API of transkribus, and this framework: https://github.com/HarleyCoops/PyLaia
