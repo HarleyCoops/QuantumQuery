@@ -5,8 +5,7 @@
         "Experiment": "Modify the model to dynamically adjust its block size during training, starting with a smaller block size and gradually increasing it. This could potentially lead to faster initial training and better long-range dependency learning.",
         "Interestingness": 6,
         "Feasibility": 4,
-        "Novelty": 4,
-        "novel": false
+        "Novelty": 4
     },
     {
         "Name": "layerwise_learning_rates",
@@ -14,7 +13,238 @@
         "Experiment": "Implement layer-wise learning rates, where each transformer layer has its own learning rate. Modify the configure_optimizers function to assign different learning rates to different layers, with deeper layers having lower learning rates. Compare the training dynamics, convergence speed, and final performance with the baseline model.",
         "Interestingness": 4,
         "Feasibility": 6,
-        "Novelty": 2,
-        "novel": false
+        "Novelty": 2
+    },
+    {
+        "Name": "hybrid_char_ngram_tokenization",
+        "Title": "Hybrid Character-Ngram Tokenization: Balancing Simplicity and Efficiency in Language Models",
+        "Experiment": "Implement a hybrid tokenization method combining character-level and n-gram tokenization for frequent sequences. Modify the data preprocessing to identify common n-grams (n=2,3) and add them to the vocabulary. Update get_batch, encode, and decode functions to work with the hybrid tokenization. Adjust vocab_size in the model configuration. Train models using both standard character-level and hybrid tokenization on all datasets, comparing performance, convergence speed, and generated text quality.",
+        "Interestingness": 7,
+        "Feasibility": 7,
+        "Novelty": 5
+    },
+    {
+        "Name": "attention_hidden_state_evolution",
+        "Title": "Tracking the Evolution of Attention Patterns and Hidden State Clusters in Language Model Training",
+        "Experiment": "Modify the training loop to log attention weights and hidden states at exponentially spaced checkpoints (e.g., iterations 1, 10, 100, 1000, etc.). Focus on the first and last layers, and a middle layer. Implement visualization functions for attention heatmaps and t-SNE plots of hidden states. Quantify changes in attention entropy and hidden state cluster separation over time. Correlate these metrics with model perplexity improvements. Analyze how different linguistic features (e.g., syntax vs semantics) emerge in different layers and at different stages of training. Use findings to propose hypotheses for more efficient training strategies or architectural improvements for language models.",
+        "Interestingness": 9,
+        "Feasibility": 8,
+        "Novelty": 7
+    },
+    {
+        "Name": "initialization_impact_study",
+        "Title": "Comparative Analysis of Initialization Strategies in GPT Models: Impact on Convergence and Performance",
+        "Experiment": "Modify the _init_weights method in the GPT class to implement multiple initialization strategies (Xavier/Glorot, He, orthogonal) for key model components: token embeddings, positional embeddings, attention weights, and feedforward layers. Create model variants with different initialization combinations. Train these variants on all datasets, comparing convergence speed (loss vs. iterations), final performance (validation perplexity), and inference speed (tokens/second). Analyze the impact of initialization on training stability and generalization by plotting training/validation loss curves and examining generated text samples at different training stages.",
+        "Interestingness": 8,
+        "Feasibility": 9,
+        "Novelty": 7
+    },
+    {
+        "Name": "adaptive_gelu_swish",
+        "Title": "Adaptive GELU-Swish Activation: Optimizing Non-linearity in GPT Models",
+        "Experiment": "Modify the MLP class to implement an adaptive activation function that interpolates between GELU and Swish using a learnable parameter. Update the model configuration to enable or disable this adaptive activation. Train models with standard GELU, Swish, and the new adaptive activation on all datasets. Compare convergence speed, final performance, and inference speed. Analyze the learned interpolation parameters across different layers and training stages. Evaluate the impact on generated text quality and perplexity.",
+        "Interestingness": 7,
+        "Feasibility": 8,
+        "Novelty": 5
+    },
+    {
+        "Name": "sparse_attention_patterns",
+        "Title": "Scaling Efficiency in GPT Models: A Comparative Study of Sparse Attention Patterns",
+        "Experiment": "Modify the CausalSelfAttention class to implement two sparse attention patterns: 1) fixed local-global attention and 2) fixed strided attention. Add a configuration option to select the attention pattern. Train models with full attention and the two sparse patterns on all datasets, comparing training time, GPU memory usage, convergence rate, final perplexity, and inference speed. Analyze the impact of sequence length (256, 512, 1024 tokens) on efficiency gains. Visualize attention patterns and evaluate text generation quality for each configuration. Measure FLOPs for forward and backward passes to quantify computational savings.",
+        "Interestingness": 9,
+        "Feasibility": 8,
+        "Novelty": 8
+    },
+    {
+        "Name": "positional_encoding_comparison",
+        "Title": "Comparative Analysis of Positional Encoding Schemes in GPT Models: Impact on Performance and Extrapolation",
+        "Experiment": "Modify the GPT class to implement three positional encoding schemes: 1) sinusoidal encodings, 2) learned positional embeddings, and 3) rotary positional encodings (RoPE). Update the model configuration to select the encoding scheme. Train models with each scheme on all datasets, comparing convergence speed and final perplexity on validation data. Implement an extrapolation test by evaluating perplexity on sequences 2x and 4x longer than the training length. Analyze attention patterns at different sequence positions to understand how encodings affect the model's behavior. Compare text generation quality for each configuration, focusing on maintaining coherence in longer outputs.",
+        "Interestingness": 9,
+        "Feasibility": 8,
+        "Novelty": 8
+    },
+    {
+        "Name": "gradient_noise_injection",
+        "Title": "Gradient Noise Injection in GPT Training: Enhancing Generalization and Robustness",
+        "Experiment": "Implement a GradientNoiseOptimizer class that wraps the AdamW optimizer and adds Gaussian noise to gradients before the parameter update. Modify the configure_optimizers method in the GPT class to use this new optimizer. Add a noise_scale hyperparameter to control the standard deviation of the injected noise. Train models with different noise scales (0, 0.001, 0.01, 0.1) on all datasets. Evaluate perplexity and generate text samples at 25%, 50%, 75%, and 100% of total training iterations. Compare training curves, final perplexity, and generated text quality. Analyze the impact on convergence speed and generalization by evaluating on held-out data. Test model robustness by measuring perplexity on slightly perturbed input sequences (e.g., with 5% of characters randomly changed).",
+        "Interestingness": 8,
+        "Feasibility": 9,
+        "Novelty": 7
+    },
+    {
+        "Name": "model_size_dataset_scaling",
+        "Title": "Optimal Model Scaling: Investigating the Relationship Between Model Size and Dataset Characteristics",
+        "Experiment": "Modify GPTConfig to vary model size (n_layer and n_embd). Create models ranging from small (2 layers, 64 embeddings) to the largest memory allows. Implement a dataset complexity metric using type-token ratio and average sentence length. Train models on all datasets, recording training/validation perplexity, convergence speed, overfitting measure (train-val perplexity gap), FLOPs, and memory usage. Analyze performance curves to find optimal model size per dataset. Generate plots showing relationships between model size, dataset complexity, and performance. Provide guidelines for efficient model selection based on dataset characteristics and computational constraints.",
+        "Interestingness": 9,
+        "Feasibility": 9,
+        "Novelty": 8
+    },
+    {
+        "Name": "linear_attention_efficiency",
+        "Title": "Enhancing GPT Efficiency: FAVOR+ Linear Attention vs Standard Attention",
+        "Experiment": "Modify the CausalSelfAttention class to implement both standard attention and FAVOR+ linear attention. Add a configuration option to select the attention mechanism. Train models with both attention types on all datasets, comparing: 1) Training time per epoch, 2) GPU memory usage, 3) Convergence rate (loss vs. epochs), and 4) Final perplexity. Analyze efficiency gains for sequence lengths of 256, 512, and 1024 tokens. Implement a separate inference script to measure generation speed (tokens/second) and memory usage during inference. Plot attention pattern visualizations for both methods. Calculate and compare the theoretical vs. actual FLOPs for forward and backward passes.",
+        "Interestingness": 9,
+        "Feasibility": 8,
+        "Novelty": 8
+    },
+    {
+        "Name": "adaptive_gradient_clipping",
+        "Title": "Enhancing GPT Training Stability with Adaptive Gradient Clipping for Character-Level Language Modeling",
+        "Experiment": "Modify the configure_optimizers method in the GPT class to implement Adaptive Gradient Clipping (AGC). Update the training loop to apply AGC before the optimizer step. Train models with and without AGC on all datasets, comparing: 1) Training loss volatility (standard deviation of loss over a rolling window), 2) Convergence speed (iterations to reach a target validation loss), 3) Final validation perplexity, and 4) Maximum learning rate achievable without divergence. Analyze the impact of AGC on the shakespeare_char, enwik8, and text8 datasets. Plot learning curves and gradient norm distributions for each configuration. Evaluate the effect on generated text quality by comparing perplexity and human-readable samples.",
+        "Interestingness": 8,
+        "Feasibility": 8,
+        "Novelty": 7
+    },
+    {
+        "Name": "focal_loss_char_lm",
+        "Title": "Enhancing Character-Level Language Models with Focal Loss: Improving Rare Character Prediction",
+        "Experiment": "Modify the forward method in the GPT class to implement focal loss as an alternative to cross-entropy loss. Add a configuration option to select the loss function and adjust the focal loss gamma parameter. Train models with both loss functions on all datasets, comparing: 1) Training and validation loss curves, 2) Performance on rare character sequences, 3) Quality of generated text, and 4) Attention patterns for frequent vs. rare characters. Implement a separate evaluation script to analyze the model's performance on a held-out set of rare character sequences. Plot attention heatmaps for both loss functions to visualize differences in how the model attends to rare vs. common characters. Analyze the impact of the focal loss gamma parameter on model performance and generalization.",
+        "Interestingness": 9,
+        "Feasibility": 8,
+        "Novelty": 8
+    },
+    {
+        "Name": "progressive_context_expansion",
+        "Title": "Progressive Context Expansion for Hierarchical Learning in Character-Level Language Models",
+        "Experiment": "Modify the GPT class to implement progressive context expansion across layers. For each layer, limit the context size to (layer_index + 1) * (block_size / n_layer), rounded down. Update the forward method to apply appropriate masks to the attention computations. Train models with and without progressive context expansion on all datasets, comparing perplexity, convergence speed, generated text quality, and computational efficiency (training time and memory usage). Analyze the impact on different sequence lengths by evaluating on inputs of varying sizes. Examine the learned representations at different layers using t-SNE visualization of hidden states. Evaluate long-range coherence by generating longer sequences and measuring perplexity at different distances from the prompt.",
+        "Interestingness": 9,
+        "Feasibility": 8,
+        "Novelty": 8
+    },
+    {
+        "Name": "char_vs_ngram_tokenization",
+        "Title": "Character vs N-gram Tokenization: Impact on Performance and Efficiency in Fixed-Size Language Models",
+        "Experiment": "1) Implement a simple n-gram tokenization method (for n=1, 2, 3) alongside the existing character-level tokenization. 2) Modify data preprocessing to apply both tokenization schemes. 3) Update get_batch, encode, and decode functions to work with both methods. 4) Adjust vocab_size and block_size in model configuration based on the tokenization method, keeping the total sequence information constant. 5) Train models using both tokenization methods on all datasets, comparing perplexity, convergence speed, memory usage, inference speed, and generated text quality. 6) Analyze the trade-off between vocabulary size and sequence length for a fixed model size. 7) Evaluate models on out-of-distribution text to assess generalization capabilities.",
+        "Interestingness": 8,
+        "Feasibility": 8,
+        "Novelty": 7
+    },
+    {
+        "Name": "sharpness_aware_minimization",
+        "Title": "Sharpness-Aware Minimization for Improved Generalization in Character-Level Language Models",
+        "Experiment": "1) Implement a simplified SAM optimizer class that wraps the existing AdamW optimizer, with configurable rho parameter. 2) Modify the configure_optimizers method in the GPT class to allow selection between AdamW and SAM. 3) Update the training loop to accommodate the two-step update process required by SAM. 4) Train models with both optimizers on all datasets, comparing convergence speed, final perplexity, and training time. 5) Implement specific generalization metrics: a) perplexity on a held-out set of rare character sequences, b) performance on text with intentionally introduced typos or errors. 6) Compare generated text quality using both human evaluation and character error rate (CER). 7) Analyze the impact of SAM on different model sizes and with different rho values (e.g., 0.05, 0.1, 0.2) to find the optimal configuration.",
+        "Interestingness": 9,
+        "Feasibility": 6,
+        "Novelty": 8
+    },
+    {
+        "Name": "mish_activation_study",
+        "Title": "Evaluating Mish Activation in Character-Level GPT Models: Performance, Efficiency, and Generalization",
+        "Experiment": "1) Implement the Mish activation function. 2) Modify the MLP class to allow switching between GELU, ReLU, and Mish activations. 3) Update the model configuration to include an activation function parameter. 4) Train models with each activation function on all datasets, comparing convergence speed, final perplexity, and inference speed (including computational overhead analysis). 5) Analyze the impact on generated text quality, focusing on character-level patterns and relationships. 6) Visualize activation patterns throughout training for each function. 7) Evaluate model performance on out-of-distribution text to assess generalization capabilities.",
+        "Interestingness": 9,
+        "Feasibility": 9,
+        "Novelty": 7
+    },
+    {
+        "Name": "simplified_performer_attention_char_lm",
+        "Title": "Simplified Performer-Inspired Attention for Efficient Character-Level Language Modeling",
+        "Experiment": "1) Implement a simplified version of Performer attention in the CausalSelfAttention class, using random projections to approximate the attention matrix. 2) Modify the GPT class to allow switching between standard and simplified Performer attention. 3) Train models with each attention mechanism on all datasets, comparing training time, memory usage, perplexity, and convergence speed. 4) Analyze performance on sequences of increasing length (256, 512, 1024) to evaluate scalability. 5) Evaluate character-level long-range dependency learning using specially crafted test sequences with repeated character patterns at varying distances. 6) Compare generated text quality, focusing on consistency in character-level patterns (e.g., consistent spelling of recurring words). 7) Visualize attention patterns to understand how the simplified Performer attention captures character-level relationships differently from standard attention.",
+        "Interestingness": 8,
+        "Feasibility": 8,
+        "Novelty": 7
+    },
+    {
+        "Name": "lr_schedule_comparison_char_lm",
+        "Title": "Optimizing Learning Rate Schedules for Character-Level Language Models: Balancing Performance and Efficiency",
+        "Experiment": "1) Modify the get_lr function to implement five schedules: constant (baseline), cosine, linear decay, step decay (halving every 1/4 of total iterations), and triangular cyclical. 2) Update the model configuration to select the learning rate schedule. 3) Train models with each schedule on all datasets, comparing convergence speed, final perplexity, and training stability. 4) Implement an evaluation script to analyze hierarchical pattern learning using n-gram perplexity (n=1,2,5,10) throughout training. 5) Compare generated text quality using perplexity and n-gram diversity metrics. 6) Analyze performance on rare vs. common characters for each schedule. 7) Visualize learning rate curves, training/validation loss curves, and compute efficiency (perplexity improvement per computation time) for each schedule. 8) Examine the impact of schedules on attention patterns at different hierarchical levels throughout training.",
+        "Interestingness": 8,
+        "Feasibility": 9,
+        "Novelty": 7
+    },
+    {
+        "Name": "two_scale_char_attention",
+        "Title": "Two-Scale Attention Mechanism for Improved Character-Level Language Modeling",
+        "Experiment": "1) Modify the CausalSelfAttention class to implement a two-scale attention mechanism with local and global context groups. 2) Update the GPT class configuration to specify the number of heads for local and global attention. 3) Implement custom attention masks for each head group to limit local context appropriately. 4) Train models with two-scale attention on all datasets, comparing perplexity, convergence speed, and inference time with baseline models. 5) Analyze performance on sequences of varying lengths, with a focus on repeated patterns at different distances and rare character sequences. 6) Compare generated text quality, assessing both local coherence and global structure. 7) Visualize attention patterns for local and global heads to understand how the model captures character-level relationships at different scales. 8) Evaluate computational efficiency and memory usage compared to the baseline model.",
+        "Interestingness": 8,
+        "Feasibility": 9,
+        "Novelty": 7
+    },
+    {
+        "Name": "dual_scale_char_transformer",
+        "Title": "Dual-Scale Transformer Architecture for Improved Long-Range Modeling in Character-Level Language Models",
+        "Experiment": "1) Modify the GPT class to implement a dual-scale transformer architecture with two layer groups: character-level and context-level. 2) Update the CausalSelfAttention class to implement different attention spans for each layer group (e.g., local attention for character-level, full attention for context-level). 3) Modify the forward method to apply the appropriate attention span for each layer group. 4) Train models with the dual-scale architecture on all datasets, comparing perplexity, convergence speed, and generated text quality with baseline models. 5) Implement specific tests for long-range dependency learning, such as predicting characters with long-distance dependencies and maintaining consistent entity references. 6) Analyze the learned representations at different scales using attention visualization. 7) Evaluate the model's performance on generating coherent text of increasing lengths (e.g., 256, 512, 1024 characters). 8) Compare computational efficiency and memory usage with the baseline model.",
+        "Interestingness": 9,
+        "Feasibility": 8,
+        "Novelty": 8
+    },
+    {
+        "Name": "static_char_ngram_tokenization",
+        "Title": "Static Character N-gram Tokenization for Efficient Character-Level Language Modeling",
+        "Experiment": "1) Implement a preprocessing step to identify the most frequent character bigrams and trigrams in the training data, creating a fixed vocabulary of single characters plus these n-grams. 2) Modify the tokenization process in get_batch to use this expanded vocabulary. 3) Update the model's vocab_size based on the new vocabulary. 4) Train models using both standard character-level (baseline) and n-gram tokenization on all datasets, comparing perplexity, convergence speed, and memory usage. 5) Analyze the impact on rare character sequences and out-of-vocabulary handling using a held-out test set. 6) Evaluate generated text quality using BLEU and character error rate (CER) metrics, comparing against the baseline. 7) Measure inference speed (tokens/second) for both tokenization methods. 8) Experiment with different vocabulary sizes (e.g., top 100, 500, 1000 n-grams) to find the optimal balance between granularity and efficiency.",
+        "Interestingness": 8,
+        "Feasibility": 9,
+        "Novelty": 8
+    },
+    {
+        "Name": "normalization_comparison_char_lm",
+        "Title": "Comparative Analysis of Normalization Techniques in Character-Level Language Models",
+        "Experiment": "1) Modify the LayerNorm class to implement RMSNorm alongside the existing Layer Normalization. 2) Update the GPT class and configuration to allow selection of normalization technique. 3) Train models with each normalization method on all datasets, comparing convergence speed, final perplexity, and memory usage. 4) Measure actual training and inference times for each method. 5) Analyze gradient statistics (mean, variance) throughout training for each method to assess training stability. 6) Evaluate model performance on sequences of varying lengths (e.g., 128, 256, 512 characters) to assess the impact of normalization on different context sizes. 7) Compare generated text quality using perplexity and character-level n-gram diversity metrics. 8) Analyze the trade-off between model performance and computational efficiency for each normalization method.",
+        "Interestingness": 8,
+        "Feasibility": 8,
+        "Novelty": 7
+    },
+    {
+        "Name": "multi_span_char_attention",
+        "Title": "Multi-Span Attention for Improved Long-Range Modeling in Character-Level Language Models",
+        "Experiment": "1) Modify the CausalSelfAttention class to implement a multi-span attention mechanism, where some heads focus on local character spans and others on the full sequence. 2) Update the GPT class configuration to specify the number of heads for local and global attention, and the span size for local attention. 3) Implement custom attention masks for local attention heads to limit their context appropriately. 4) Train models with multi-span attention on all datasets, comparing perplexity, convergence speed, and generated text quality with baseline models. 5) Analyze performance on long-range dependency tasks, such as maintaining consistent entity references or capturing long-distance character patterns. 6) Visualize attention patterns for local and global heads to understand how the model captures character-level relationships at different scales. 7) Evaluate computational efficiency and memory usage compared to the baseline model. 8) Experiment with different local span sizes and head allocations to find optimal configurations.",
+        "Interestingness": 8,
+        "Feasibility": 8,
+        "Novelty": 7
+    },
+    {
+        "Name": "dual_scale_char_attention",
+        "Title": "Dual-Scale Character Attention: Enhancing Context Modeling in Character-Level Language Models",
+        "Experiment": "1) Modify the CausalSelfAttention class to implement two types of attention heads: local (character-level) and global (broader context). 2) Update the GPT class configuration to specify the number of heads for local and global attention. 3) Implement custom attention masks to limit the context for local heads (experimenting with spans of 5, 10, and 20 characters) while allowing global heads to attend to the full sequence. 4) Train models with the dual-scale attention on all datasets, comparing perplexity, convergence speed, and generated text quality with two baselines: the original model and a model with the same total number of attention heads but without the dual-scale split. 5) Evaluate performance on specific tasks: a) next character prediction, b) word completion (given first few characters), and c) maintaining consistent entity spelling over long distances. 6) Analyze attention patterns of local and global heads using attention visualization techniques. 7) Measure inference speed (characters/second) and memory usage compared to the baseline models. 8) Experiment with different ratios of local to global heads (e.g., 1:1, 2:1, 1:2) to find the optimal configuration.",
+        "Interestingness": 8,
+        "Feasibility": 8,
+        "Novelty": 7
+    },
+    {
+        "Name": "hierarchical_char_pooling",
+        "Title": "Hierarchical Character Pooling: Progressive Aggregation for Improved Long-Range Modeling in Character-Level Language Models",
+        "Experiment": "1) Implement a new CharacterPoolingLayer class using a simple max-pooling strategy with increasing window sizes in later layers. 2) Modify the Block class to include the CharacterPoolingLayer after each self-attention layer. 3) Update the GPT class to configure the pooling window sizes for each layer (e.g., [1, 2, 4, 8] for a 4-layer model). 4) Train models with and without hierarchical character pooling on all datasets, comparing perplexity, convergence speed, and generated text quality. 5) Implement specific tests for long-range coherence: a) character-level perplexity at different distances from the context, b) consistency in entity naming over long sequences. 6) Compare performance and efficiency with a baseline n-gram model (e.g., 3-gram). 7) Analyze computational cost and memory usage for different pooling configurations. 8) Visualize the effective receptive field of the model at different layers to understand how information is aggregated.",
+        "Interestingness": 8,
+        "Feasibility": 8,
+        "Novelty": 8
+    },
+    {
+        "Name": "character_aware_initialization",
+        "Title": "Comprehensive Character-Aware Initialization: Enhancing Character-Level Language Models with Linguistic Priors",
+        "Experiment": "1) Create a pre-computed character statistics file containing character frequencies, bigram statistics, and character categories for the target language. 2) Implement a character_aware_init function that uses these statistics to initialize token embeddings, attention weight matrices, and feedforward layer weights. 3) Modify the GPT class's _init_weights method to use character-aware initialization for relevant components. 4) Update the model configuration to allow switching between standard and character-aware initialization. 5) Train models with both initialization methods on all datasets, comparing convergence speed, final perplexity, and generated text quality. 6) Conduct specific evaluations on rare characters, out-of-vocabulary words, and multilingual generalization (if applicable). 7) Analyze attention patterns and hidden state representations to understand how character-aware initialization affects the model's internal representations. 8) Compare computational efficiency during training and inference between the two initialization methods.",
+        "Interestingness": 9,
+        "Feasibility": 8,
+        "Novelty": 8
+    },
+    {
+        "Name": "adaptive_embedding_size",
+        "Title": "Adaptive Embedding Size: Tailoring Character Representations for Efficient Language Modeling",
+        "Experiment": "1) Implement a function to analyze the input data's character distribution and vocabulary size. 2) Modify the GPT class to allow for adjustable embedding sizes. 3) Create an embedding size selection mechanism based on the data analysis (e.g., using a heuristic or simple optimization). 4) Update the model initialization to use the adaptive embedding size. 5) Train models with adaptive embedding sizes on all datasets, comparing perplexity, convergence speed, and memory usage with fixed-size embedding baselines. 6) Analyze the relationship between vocabulary characteristics and selected embedding sizes. 7) Evaluate model performance on held-out data with different character distributions. 8) Compare generated text quality and inference speed between adaptive and fixed embedding size models.",
+        "Interestingness": 8,
+        "Feasibility": 9,
+        "Novelty": 7
+    },
+    {
+        "Name": "char_type_attention",
+        "Title": "Character-Type Attention: Enhancing Character-Level Language Models with Type-Specific Attention Patterns",
+        "Experiment": "1) Define four character types: alphabetic, numeric, punctuation, and space. 2) Modify the CausalSelfAttention class to implement four fixed attention patterns, one for each character type. 3) Update the forward method to select the appropriate attention pattern based on the input character type. 4) Train models with character-type attention on all datasets, comparing perplexity, convergence speed, and generated text quality with baseline models using standard attention. 5) Evaluate performance on specific tasks: handling of rare words, misspellings, and numeric sequences. 6) Analyze attention patterns for different character types. 7) Measure computational overhead and memory usage compared to the baseline attention mechanism. 8) Test cross-lingual generalization by evaluating on a small dataset in a different language using the same character set.",
+        "Interestingness": 8,
+        "Feasibility": 8,
+        "Novelty": 7
+    },
+    {
+        "Name": "pyramidal_char_transformer",
+        "Title": "Pyramidal Character Transformer: A Progressive Multi-Scale Architecture for Efficient Character-Level Language Modeling",
+        "Experiment": "1) Modify the GPT class to implement a pyramidal structure where each layer processes an increasingly larger context window. 2) Update the CausalSelfAttention class to handle variable context sizes across layers. 3) Implement a custom masking mechanism to enforce the pyramidal attention structure. 4) Train models with the pyramidal architecture on all datasets, comparing perplexity, convergence speed, and generated text quality with baseline models. 5) Evaluate performance on rare character sequences and long-range character dependencies using custom test sets. 6) Analyze attention patterns across different layers to understand how the model captures multi-scale character relationships. 7) Compare computational efficiency and memory usage with the baseline model. 8) Experiment with different progression rates for context window size to find the optimal configuration.",
+        "Interestingness": 8,
+        "Feasibility": 8,
+        "Novelty": 7
+    },
+    {
+        "Name": "char_ngram_context_cache",
+        "Title": "Character N-gram Context Caching for Enhanced Consistency in Character-Level Language Models",
+        "Experiment": "1) Modify the generate method in the GPT class to implement a fixed-size cache storing recent character n-grams (n=1,2,3) and their associated hidden states. 2) Implement a compute_ngram_context function that aggregates information from the cache based on n-gram matches with the current context. 3) Update the generate method to incorporate the n-gram context when predicting the next character. 4) Train baseline models on all datasets. 5) Generate text using both standard and n-gram context-aware methods, comparing perplexity, consistency in character usage, and maintenance of rare or domain-specific terms. 6) Analyze the impact of cache size and n-gram lengths on generation quality and computational overhead. 7) Evaluate the model's ability to maintain consistent spelling of names and technical terms over long generated sequences. 8) Experiment with different methods of incorporating the n-gram context (e.g., attention mechanism, concat, or gating).",
+        "Interestingness": 9,
+        "Feasibility": 8,
+        "Novelty": 8
     }
 ]
